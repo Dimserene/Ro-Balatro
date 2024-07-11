@@ -120,10 +120,10 @@ SMODS.Joker {  --Noob
         return {vars = {card.ability.extra.slots}}
     end,
     add_to_deck = function(self,card,from_debuff)
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.extra.slots
+        G.consumables.config.card_limit = G.consumables.config.card_limit + card.ability.extra.slots
     end,
     remove_from_deck = function(self,card,from_debuff)
-        G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.extra.slots
+        G.consumables.config.card_limit = G.consumables.config.card_limit - card.ability.extra.slots
     end
 }
 
@@ -234,11 +234,11 @@ SMODS.Joker { --Banland
     calculate = function(self,card,context)
         if context.selling_self then
             local amount = 0
-            for i, v in pairs (G.consumeables.cards) do
+            for i, v in pairs (G.consumables.cards) do
                 v.getting_sliced = true
-                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer - 1
+                G.GAME.consumable_buffer = G.GAME.consumable_buffer - 1
                 G.E_MANAGER:add_event(Event({func = function()
-                    G.GAME.consumeable_buffer = 0
+                    G.GAME.consumable_buffer = 0
                     card:juice_up(0.8, 0.8)
                     v:start_dissolve(G.C.money, nil, 1.6)
                     play_sound('generic1', 0.96+math.random()*0.08)
@@ -257,7 +257,7 @@ SMODS.Joker { --Banland
         card.ability.extra.willgive = 0
         if G.STAGE == G.STAGES.RUN then
             local amount = 0
-            for i, v in pairs (G.consumeables.cards) do
+            for i, v in pairs (G.consumables.cards) do
                 amount = amount + 1
             end
             card.ability.extra.willgive = card.ability.extra.dollars * amount
@@ -338,12 +338,12 @@ SMODS.Joker { --SFoTH
     calculate = function(self,card,context)
         if context.setting_blind and not card.getting_sliced then
             local amount = 0
-            for i, v in pairs (G.consumeables.cards) do
+            for i, v in pairs (G.consumables.cards) do
                 if v.ability.set == 'Gear' then
                     v.getting_sliced = true
-                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer - 1
+                    G.GAME.consumable_buffer = G.GAME.consumable_buffer - 1
                     G.E_MANAGER:add_event(Event({func = function()
-                        G.GAME.consumeable_buffer = 0
+                        G.GAME.consumable_buffer = 0
                         card:juice_up(0.8, 0.8)
                         v:start_dissolve(G.C.money, nil, 1.6)
                         play_sound('generic1', 0.96+math.random()*0.08)
@@ -353,14 +353,14 @@ SMODS.Joker { --SFoTH
                 end
             end
             while amount > 0 do
-                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                G.GAME.consumable_buffer = G.GAME.consumable_buffer + 1
                 G.E_MANAGER:add_event(Event({
                     func = function() 
-                        local _card = create_card('Spectral',G.consumeables, nil, nil, nil, nil, nil, 'sfoth')
+                        local _card = create_card('Spectral',G.consumables, nil, nil, nil, nil, nil, 'sfoth')
                         _card:set_edition({negative = true}, true)
                         _card:add_to_deck()
-                        G.consumeables:emplace(_card)
-                        G.GAME.consumeable_buffer = 0
+                        G.consumables:emplace(_card)
+                        G.GAME.consumable_buffer = 0
                         return true
                 end}))
                 amount = amount - 1
@@ -393,7 +393,7 @@ SMODS.Joker {  --Bacon Hair
     calculate = function(self,card,context)
         if context.joker_main then
             local amount = 0
-            for i, v in pairs (G.consumeables.cards) do
+            for i, v in pairs (G.consumables.cards) do
                 amount = amount + 1
             end
             card.ability.extra.chips = card.ability.extra.freechips + card.ability.extra.gainedchips * amount
@@ -408,7 +408,7 @@ SMODS.Joker {  --Bacon Hair
         card.ability.extra.chips = card.ability.extra.freechips
         if G.STAGE == G.STAGES.RUN then
             local amount = 0
-            for i, v in pairs (G.consumeables.cards) do
+            for i, v in pairs (G.consumables.cards) do
                 amount = amount + 1
             end
             card.ability.extra.chips = card.ability.extra.freechips + card.ability.extra.gainedchips * amount
@@ -437,11 +437,11 @@ SMODS.Joker { --Rthro
     end,
     calculate = function(self,card,context)
         if context.setting_blind and not card.getting_sliced then
-            for i, v in pairs (G.consumeables.cards) do
+            for i, v in pairs (G.consumables.cards) do
                 v.getting_sliced = true
-                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer - 1
+                G.GAME.consumable_buffer = G.GAME.consumable_buffer - 1
                 G.E_MANAGER:add_event(Event({func = function()
-                    G.GAME.consumeable_buffer = 0
+                    G.GAME.consumable_buffer = 0
                     card:juice_up(0.8, 0.8)
                     v:start_dissolve(G.C.money, nil, 1.6)
                     play_sound('generic1', 0.96+math.random()*0.08)
@@ -479,7 +479,7 @@ SMODS.Joker { --Swordsman
         return {vars = {card.ability.extra.xmult,card.ability.extra.xmultgain,card.ability.extra.xmultloss}}
     end,
     calculate = function(self,card,context)
-        if context.using_consumeable and not context.blueprint then
+        if context.using_consumable and not context.blueprint then
             card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmultgain
             G.E_MANAGER:add_event(Event({
                 func = function() card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')}); return true
@@ -562,7 +562,7 @@ SMODS.Consumable { --Sword
     can_use = function(self,card)
         if card.ability.extra.currentuses > 0 then
             if G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.PLANET_PACK then
-                if card.ability.consumeable.mod_num >= #G.hand.highlighted + (self.area == G.hand and -1 or 0) and #G.hand.highlighted + (self.area == G.hand and -1 or 0) >= 1 then
+                if card.ability.consumable.mod_num >= #G.hand.highlighted + (self.area == G.hand and -1 or 0) and #G.hand.highlighted + (self.area == G.hand and -1 or 0) >= 1 then
                     return true
                 end
             end
@@ -1227,13 +1227,13 @@ SMODS.Consumable { --Zombie Staff
                     return true
                 end}))   
         else
-            G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+            G.GAME.consumable_buffer = G.GAME.consumable_buffer + 1
             G.E_MANAGER:add_event(Event({
                 func = function() 
-                    local _card = create_card('Tarot',G.consumeables, nil, nil, nil, nil, nil, 'car')
+                    local _card = create_card('Tarot',G.consumables, nil, nil, nil, nil, nil, 'car')
                     _card:add_to_deck()
-                    G.consumeables:emplace(_card)
-                    G.GAME.consumeable_buffer = 0
+                    G.consumables:emplace(_card)
+                    G.GAME.consumable_buffer = 0
                     _card:set_edition({negative = true},true)
                     card:juice_up(0.5,0.5)
                     play_sound('robl_ZombieGroan', 1.2, 1)
